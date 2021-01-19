@@ -7957,7 +7957,9 @@ static void jsonenc_msgfields(jsonenc *e, const upb_msg *msg,
     int n = upb_msgdef_fieldcount(m);
     for (i = 0; i < n; i++) {
       f = upb_msgdef_field(m, i);
-      jsonenc_fieldval(e, f, upb_msg_get(msg, f), &first);
+      if (!upb_fielddef_haspresence(f) || upb_msg_has(msg, f)) {
+        jsonenc_fieldval(e, f, upb_msg_get(msg, f), &first);
+      }
     }
   } else {
     /* Iterate over non-empty fields. */
